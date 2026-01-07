@@ -1,121 +1,161 @@
-// src/components/Navbar.jsx
-import { useState, useContext } from "react";
-import { Link } from "react-router-dom";
-import { FaShoppingCart, FaBars, FaTimes, FaSearch } from "react-icons/fa";
+import { Search, ShoppingCart, User } from "lucide-react";
+import { useNavigate, useLocation } from "react-router-dom";
+import { useState, useEffect, useContext } from "react";
+import logo from "../assets/logo/logo.png";
+import { getUser, logoutUser } from "../utils/auth";
 import { CartContext } from "../context/CartContext";
 
-const Navbar = () => {
-  const [isOpen, setIsOpen] = useState(false);
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  const { cartCount } = useContext(CartContext);
+export default function Navbar() {
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  const { cartItems } = useContext(CartContext); // ✅ cart context
+  const cartCount = cartItems.reduce((acc, item) => acc + item.qty, 0);
+
+  const [search, setSearch] = useState("");
+  const [user, setUser] = useState(null);
+  const [openProfile, setOpenProfile] = useState(false);
+
+  // keep user synced
+  useEffect(() => {
+    setUser(getUser());
+  }, [location.pathname]);
+
+  const handleSearch = () => {
+    if (!search.trim()) return;
+    navigate(`/products?search=${search}`);
+    setSearch("");
+  };
+
+  const handleLogout = () => {
+    logoutUser();
+    setUser(null);
+    setOpenProfile(false);
+    navigate("/");
+  };
 
   return (
-    <nav className="bg-white shadow-md fixed top-0 left-0 w-full z-50">
-      <div className="max-w-7xl mx-auto px-4 py-3 flex justify-between items-center">
-        {/* Brand */}
-        <div className="text-2xl font-bold text-gray-800 cursor-pointer">
-          <Link to="/">Westone</Link>
+    <header className="sticky top-0 z-50 bg-white shadow">
+      <div className="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between">
+
+        {/* LOGO */}
+        <div
+          onClick={() => navigate("/")}
+          className="cursor-pointer flex items-center"
+        >
+          <img src={logo} alt="Logo" className="h-10 object-contain" />
         </div>
 
-        {/* Center Search Bar */}
-        <div className="hidden md:flex flex-1 justify-center px-4">
-          <div className="relative w-1/2">
+        {/* MENU + SEARCH */}
+        <div className="hidden md:flex items-center gap-6">
+          <nav className="flex items-center gap-6 text-sm font-medium">
+            <span onClick={() => navigate("/")} className="cursor-pointer">Home</span>
+            <span onClick={() => navigate("/products")} className="cursor-pointer">Products</span>
+            <span onClick={() => navigate("/about")} className="cursor-pointer">About Us</span>
+            <span onClick={() => navigate("/contact")} className="cursor-pointer">Contact</span>
+          </nav>
+
+          {/* SEARCH BAR */}
+          <div className="relative">
             <input
               type="text"
               placeholder="Search..."
-              className="w-full border border-gray-300 rounded-md pl-3 pr-10 py-1 focus:outline-none"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              onKeyDown={(e) => e.key === "Enter" && handleSearch()}
+              className="border rounded-full pl-4 pr-9 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-green-500"
             />
-            <FaSearch className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 cursor-pointer" />
+            <Search
+              size={16}
+              className="absolute right-3 top-2.5 cursor-pointer text-gray-500"
+              onClick={handleSearch}
+            />
           </div>
         </div>
 
-        {/* Desktop Menu */}
-        <div className="hidden md:flex items-center space-x-6">
-          <Link to="/" className="hover:text-blue-600">Home</Link>
-          <Link to="/aboutus" className="hover:text-blue-600">About Us</Link>
+        {/* RIGHT ICONS */}
+        <div className="flex items-center gap-5 relative">
 
-          {/* Dropdown */}
-          <div
-            className="relative"
-            onMouseEnter={() => setIsDropdownOpen(true)}
-            onMouseLeave={() => setIsDropdownOpen(false)}
-          >
-            <button className="hover:text-blue-600">Products ▼</button>
-            {isDropdownOpen && (
-              <div className="absolute left-0 bg-white shadow-lg rounded-md w-40">
-                <Link to="/men" className="block px-4 py-2 hover:bg-gray-100">Men</Link>
-                <Link to="/women" className="block px-4 py-2 hover:bg-gray-100">Women</Link>
-                <Link to="/kids" className="block px-4 py-2 hover:bg-gray-100">Kids</Link>
+          {/* PROFILE */}
+          <div className="relative flex items-center gap-2">
+            <User
+              className="cursor-pointer"
+              onClick={() => setOpenProfile((prev) => !prev)}
+            />
+
+            {user && (
+              <span
+                onClick={() => setOpenProfile((prev) => !prev)}
+                className="text-sm font-medium hidden md:inline cursor-pointer"
+              >
+                {user.name}
+              </span>
+            )}
+
+            {openProfile && (
+              <div className="absolute right-0 top-8 w-44 bg-white border shadow-md rounded-md text-sm z-50">
+                {!user ? (
+                  <>
+                    <button
+                      onClick={() => {
+                        setOpenProfile(false);
+                        navigate("/signin");
+                      }}
+                      className="block w-full text-left px-4 py-2 hover:bg-gray-100"
+                    >
+                      Sign In
+                    </button>
+                    <button
+                      onClick={() => {
+                        setOpenProfile(false);
+                        navigate("/signup");
+                      }}
+                      className="block w-full text-left px-4 py-2 hover:bg-gray-100"
+                    >
+                      Sign Up
+                    </button>
+                  </>
+                ) : (
+                  <>
+                    <div className="px-4 py-2 font-medium text-gray-700">
+                      {user.name}
+                    </div>
+                    <button
+                      onClick={() => {
+                        setOpenProfile(false);
+                        navigate("/profile");
+                      }}
+                      className="block w-full text-left px-4 py-2 hover:bg-gray-100"
+                    >
+                      My Profile
+                    </button>
+                    <button
+                      onClick={handleLogout}
+                      className="block w-full text-left px-4 py-2 text-red-600 hover:bg-gray-100"
+                    >
+                      Logout
+                    </button>
+                  </>
+                )}
               </div>
             )}
           </div>
 
-          <Link to="/contactus" className="hover:text-blue-600">Contact Us</Link>
+          {/* CART ICON WITH COUNT */}
+          <div
+            className="relative cursor-pointer"
+            onClick={() => navigate("/cart")}
+          >
+            <ShoppingCart />
 
-          {/* Cart with dynamic badge */}
-          <Link to="/cart" className="relative hover:text-blue-600">
-            <FaShoppingCart size={22} />
             {cartCount > 0 && (
-              <span className="absolute -top-2 -right-3 bg-red-600 text-white text-xs px-2 py-0.5 rounded-full">
+              <span className="absolute -top-2 -right-2 bg-red-600 text-white text-xs w-5 h-5 flex items-center justify-center rounded-full">
                 {cartCount}
               </span>
             )}
-          </Link>
-        </div>
-
-        {/* Mobile Menu Button */}
-        <div className="md:hidden flex items-center">
-          <button onClick={() => setIsOpen(!isOpen)}>
-            {isOpen ? <FaTimes size={22} /> : <FaBars size={22} />}
-          </button>
+          </div>
         </div>
       </div>
-
-      {/* Mobile Menu */}
-      {isOpen && (
-        <div className="md:hidden bg-white shadow-lg px-4 pb-4">
-          {/* Search in mobile */}
-          <div className="my-3 relative">
-            <input
-              type="text"
-              placeholder="Search..."
-              className="w-full border border-gray-300 rounded-md pl-3 pr-10 py-1 focus:outline-none"
-            />
-            <FaSearch className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 cursor-pointer" />
-          </div>
-
-          <Link to="/" className="block px-4 py-2 hover:bg-gray-100">Home</Link>
-          <Link to="/aboutus" className="block px-4 py-2 hover:bg-gray-100">About Us</Link>
-
-          <button
-            className="block w-full text-left px-4 py-2 hover:bg-gray-100"
-            onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-          >
-            Products {isDropdownOpen ? "▲" : "▼"}
-          </button>
-          {isDropdownOpen && (
-            <div className="pl-6">
-              <Link to="/men" className="block px-4 py-2 hover:bg-gray-100">Men</Link>
-              <Link to="/women" className="block px-4 py-2 hover:bg-gray-100">Women</Link>
-              <Link to="/kids" className="block px-4 py-2 hover:bg-gray-100">Kids</Link>
-            </div>
-          )}
-
-          <Link to="/contactus" className="block px-4 py-2 hover:bg-gray-100">Contact Us</Link>
-
-          {/* Cart with dynamic badge in mobile */}
-          <Link to="/cart" className="relative block px-4 py-2 hover:bg-gray-100">
-            <FaShoppingCart size={22} />
-            {cartCount > 0 && (
-              <span className="absolute top-1 left-8 bg-red-600 text-white text-xs px-2 py-0.5 rounded-full">
-                {cartCount}
-              </span>
-            )}
-          </Link>
-        </div>
-      )}
-    </nav>
+    </header>
   );
-};
-
-export default Navbar;
+}
