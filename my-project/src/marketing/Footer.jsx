@@ -1,10 +1,11 @@
 import {
-  FaFacebook,
+  FaFacebookF,
   FaInstagram,
   FaWhatsapp,
   FaPhoneAlt,
   FaEnvelope,
   FaMapMarkerAlt,
+  FaYoutube,
 } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 
@@ -12,120 +13,124 @@ const Footer = () => {
   const navigate = useNavigate();
 
   return (
-    <footer className="bg-[#B5C7A5] text-gray-800">
-      {/* Top Section */}
-      <div className="max-w-7xl mx-auto px-6 py-10">
-        {/* Brand + Social Icons */}
-        <div className="flex justify-between items-center border-b border-gray-300 pb-6 mb-8">
-          <div className="flex items-center space-x-4">
-            <h2 className="text-2xl font-bold tracking-wide">
-              FABRICOO PVT. LTD
-            </h2>
-            <span className="w-12 h-[2px] bg-gray-600"></span>
+    <>
+      {/* ================= FOOTER ================= */}
+      <footer className="bg-pink-800 text-white pt-14">
+        <div className="max-w-7xl mx-auto px-6">
+          {/* ================= TOP GRID ================= */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-10 pb-12 border-b border-white/30">
+            {/* CONTACT INFO */}
+            <div>
+              <h3 className="font-semibold text-lg mb-4">Contact Us</h3>
+              <ul className="space-y-3 text-sm text-white/90">
+                <li className="flex gap-2">
+                  <FaEnvelope className="mt-1" />
+                  <span>westone179@gmail.com</span>
+                </li>
+                <li className="flex gap-2">
+                  <FaPhoneAlt className="mt-1" />
+                  <span>+91 9510992890</span>
+                </li>
+                <li className="flex gap-2">
+                  <FaMapMarkerAlt className="mt-1" />
+                  <span>
+                    {" "}
+                    Golden Plaza 415, opp. Amar Jawan Circle<br /> 
+                    Near Sardar Patel Ring Road,
+                    
+                     <br /> nikol ahenedabad dujrat 380049
+                  </span>
+                </li>
+              </ul>
+            </div>
+
+            {/* QUICK LINKS */}
+            <div>
+              <h3 className="font-semibold text-lg mb-4">Quick Links</h3>
+              <ul className="space-y-2 text-sm text-white/90">
+                <li
+                  className="cursor-pointer hover:underline"
+                  onClick={() => navigate("/")}
+                >
+                  Home
+                </li>
+                <li
+                  className="cursor-pointer hover:underline"
+                  onClick={() => navigate("/about")}
+                >
+                  About Us
+                </li>
+                <li
+                  className="cursor-pointer hover:underline"
+                  onClick={() => navigate("/products")}
+                >
+                  Product
+                </li>
+                <li
+                  className="cursor-pointer hover:underline"
+                  onClick={() => navigate("/contact")}
+                >
+                  Contact Us
+                </li>
+              </ul>
+            </div>
+
+            {/* SUBSCRIBE */}
+            <div>
+              <h3 className="font-semibold text-lg mb-4">
+                Subscribe to our email
+              </h3>
+              <div className="flex">
+                <input
+                  type="email"
+                  placeholder="Enter your email"
+                  className="w-full px-3 py-2 text-gray-800 rounded-l-md outline-none"
+                />
+                <button className="bg-yellow-400 text-black px-4 rounded-r-md font-semibold hover:bg-yellow-300">
+                  →
+                </button>
+              </div>
+            </div>
           </div>
 
-          {/* Social Icons */}
-          <div className="flex space-x-4">
-            <span className="cursor-pointer hover:text-gray-600">
-              <FaFacebook size={20} />
-            </span>
+          {/* ================= BOTTOM ROW ================= */}
+          <div className="flex flex-col md:flex-row justify-between items-center gap-6 py-6 text-sm text-white/90">
+            {/* POLICIES */}
+            <div className="flex flex-wrap gap-4">
+              <span className="cursor-pointer hover:underline">
+                Privacy Policy
+              </span>
+              <span className="cursor-pointer hover:underline">
+                Refund Policy
+              </span>
+              <span className="cursor-pointer hover:underline">
+                Terms of Service
+              </span>
+              <span className="cursor-pointer hover:underline">
+                Shipping Policy
+              </span>
+            </div>
 
-            <span className="cursor-pointer hover:text-gray-600">
-              <FaInstagram size={20} />
-            </span>
-
-            {/* WhatsApp */}
-            <span
-              onClick={() => navigate("/whatsapp")}
-              className="cursor-pointer hover:text-green-600"
-            >
-              <FaWhatsapp size={22} />
-            </span>
+            {/* SOCIAL ICONS */}
+            <div className="flex gap-4 text-lg">
+              <FaFacebookF className="cursor-pointer hover:text-gray-200" />
+              <FaInstagram className="cursor-pointer hover:text-gray-200" />
+              <FaYoutube className="cursor-pointer hover:text-gray-200" />
+            </div>
           </div>
         </div>
+      </footer>
 
-        {/* Content Sections */}
-        <div className="flex flex-col md:flex-row md:justify-between md:items-start gap-8">
-          {/* Services */}
-          <div>
-            <h3 className="font-semibold mb-2">Our Services</h3>
-            <span className="block w-10 h-[2px] bg-gray-600 mb-3"></span>
-            <ul className="space-y-1 text-sm">
-              <li>Fabric Manufacturing</li>
-              <li>Cutting</li>
-              <li>Sewing</li>
-              <li>Digital & DTF Printing</li>
-              <li>Checking</li>
-              <li>Ironing</li>
-              <li>Packaging</li>
-              <li>Delivering</li>
-            </ul>
-          </div>
-
-          {/* Products */}
-          <div>
-            <h3 className="font-semibold mb-2">Our Products</h3>
-            <span className="block w-10 h-[2px] bg-gray-600 mb-3"></span>
-            <ul className="space-y-1 text-sm">
-              <li
-                onClick={() => navigate("/men")}
-                className="cursor-pointer hover:text-blue-600"
-              >
-                Men’s Wear
-              </li>
-              <li
-                onClick={() => navigate("/women")}
-                className="cursor-pointer hover:text-blue-600"
-              >
-                Women Wear
-              </li>
-              <li
-                onClick={() => navigate("/kids")}
-                className="cursor-pointer hover:text-blue-600"
-              >
-                Kids Wear
-              </li>
-            </ul>
-          </div>
-
-          {/* Contact */}
-          <div>
-            <h3 className="font-semibold mb-2">Contact Us</h3>
-            <span className="block w-10 h-[2px] bg-gray-600 mb-3"></span>
-            <ul className="space-y-2 text-sm">
-              <li className="flex items-start space-x-2">
-                <FaMapMarkerAlt className="mt-1" />
-                <span>
-                  403 Swastik Corporate Park, LBS Marg, Opp Shreyas Talkies,
-                  <br />
-                  Ghatkopar West, Mumbai - 400086, Maharashtra, India
-                </span>
-              </li>
-
-              <li className="flex items-center space-x-2">
-                <FaPhoneAlt />
-                <span>+91 84249 01673</span>
-              </li>
-
-              <li className="flex items-center space-x-2">
-                <FaEnvelope />
-                <span>parchfashion65@gmail.com</span>
-              </li>
-            </ul>
-          </div>
-        </div>
-
-        {/* Scroll to Top */}
-        <div className="flex justify-end mt-8">
-          <button
-            onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-            className="bg-gray-200 text-gray-700 rounded-full p-2 hover:bg-gray-300"
-          >
-            ↑
-          </button>
-        </div>
-      </div>
-    </footer>
+      {/* ================= FLOATING WHATSAPP ================= */}
+      <a
+        href="https://wa.me/918424901673"
+        target="_blank"
+        rel="noreferrer"
+        className="fixed bottom-6 right-6 bg-green-500 text-white p-4 rounded-full shadow-lg hover:scale-105 transition z-50"
+      >
+        <FaWhatsapp size={28} />
+      </a>
+    </>
   );
 };
 

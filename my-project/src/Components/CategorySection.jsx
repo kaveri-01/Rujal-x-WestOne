@@ -4,23 +4,23 @@ import dummyProducts from "../data/productData";
 export default function CategorySection() {
   const navigate = useNavigate();
 
-  // 🔹 derive categories from product data
+  // ✅ derive categories safely
   const categories = [
     {
-      title: "MEN",
-      value: "men",
-      image: dummyProducts.find(p => p.category === "men")?.image,
+      title: "INDOWESTERN",
+      value: "INDOWESTERN",
+      image: dummyProducts.find(
+        (p) => p.category?.toLowerCase() === "indowestern"
+      )?.image,
     },
     {
-      title: "WOMEN",
-      value: "women",
-      image: dummyProducts.find(p => p.category === "women")?.image,
+      title: "CasualWear",
+      value: "CasualWear",
+      image: dummyProducts.find(
+        (p) => p.category?.toLowerCase() === "casualwear"
+      )?.image,
     },
-    {
-      title: "KIDS",
-      value: "kids",
-      image: dummyProducts.find(p => p.category === "kids")?.image,
-    },
+    
   ];
 
   return (
@@ -33,8 +33,10 @@ export default function CategorySection() {
         {categories.map((cat) => (
           <div
             key={cat.value}
-            onClick={() => navigate(`/products?category=${cat.value}`)}
-            className="relative h-[380px] cursor-pointer overflow-hidden group"
+            onClick={() =>
+              navigate(`/products?category=${cat.value}`)
+            }
+            className="relative h-[380px] cursor-pointer overflow-hidden group rounded-xl"
           >
             {/* IMAGE */}
             <img
